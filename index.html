@@ -13,7 +13,7 @@
   <header class="topbar">
     <a class="brand" href="#" aria-label="Cutline home"><span class="brand-mark">▰</span> CUTLINE</a>
     <div class="project-name"><span class="status-dot"></span><span id="projectTitle">Untitled project</span><span class="slash">/</span><span>Episode 042</span></div>
-    <div class="top-actions"><span class="free-counter" id="freeCounter"><b>3</b> free videos today</span><button class="icon-button" aria-label="Undo" title="Undo">↶</button><button class="icon-button" aria-label="Redo" title="Redo">↷</button><button class="upgrade-button" id="upgradeBtn">Unlock unlimited <span>↗</span></button><button class="avatar" aria-label="Profile">JD</button></div>
+    <div class="top-actions"><span class="free-counter" id="freeCounter"><b>3</b> free videos today</span><button class="icon-button" aria-label="Undo" title="Undo">↶</button><button class="icon-button" aria-label="Redo" title="Redo">↷</button><button class="account-button" id="loginBtn">Log in</button><button class="upgrade-button" id="upgradeBtn">Upgrade plan <span>↗</span></button><button class="avatar" id="profileBtn" aria-label="Profile">JD</button></div>
   </header>
 
   <main class="app-shell">
@@ -71,14 +71,28 @@
       <button class="modal-close" id="closeModal" aria-label="Close checkout">×</button>
       <div class="checkout-intro"><span class="eyebrow">CUTLINE PRO</span><h2 id="checkoutTitle">Your next great clip is waiting.</h2><p>Free gets you 3 videos a day. Unlock unlimited uploads, auto-captions, and every export for less than a coffee.</p></div>
       <div class="pro-perks"><span>✦ Unlimited videos</span><span>CC Auto captions</span><span>↗ Export anywhere</span></div>
-      <div class="plan-toggle single-plan" role="group" aria-label="Billing period"><button class="plan-option active" data-plan="weekly">Weekly <strong>$3<span>/week</span></strong><em>Cancel anytime</em></button></div>
+      <div class="plan-toggle single-plan" role="group" aria-label="Billing period"><button class="plan-option active" data-plan="monthly">Monthly <strong>$10<span>/month</span></strong><em>Cancel anytime</em></button></div>
       <form class="payment-form" id="paymentForm">
         <label>Email address<input type="email" id="checkoutEmail" placeholder="you@studio.com" required /></label>
         <label class="policy-check"><input id="noRefunds" type="checkbox" required /><span>I understand that digital subscription payments are final and non-refundable, except where required by law.</span></label>
-        <button class="checkout-button" type="submit">Pay with card <span id="checkoutPrice">$3 / week</span><b>↗</b></button>
+        <button class="checkout-button" type="submit">Pay with card <span id="checkoutPrice">$10 / month</span><b>↗</b></button>
         <small class="secure-note">⌁ Secure Fincra checkout · Card payments only</small>
       </form>
       <div class="checkout-success" id="checkoutSuccess" hidden><span>✓</span><strong>Welcome to Cutline Pro</strong><p>Your workspace is ready for unlimited exports.</p><button class="primary-button" id="successClose">Back to editor</button></div>
+    </section>
+  </div>
+  <div class="modal-backdrop" id="loginModal" hidden>
+    <section class="checkout-modal account-modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <button class="modal-close" id="closeLoginModal" aria-label="Close login">×</button>
+      <div class="checkout-intro"><span class="eyebrow">ACCOUNT</span><h2 id="loginTitle">Welcome back.</h2><p>Sign in to manage projects, exports, and saved clips.</p></div>
+      <form class="payment-form" id="loginForm">
+        <label>Email address<input type="email" id="loginEmail" placeholder="you@studio.com" required /></label>
+        <label>Password<input type="password" id="loginPassword" placeholder="••••••••" required /></label>
+        <label class="remember-check"><input id="rememberMe" type="checkbox" checked /><span>Keep me signed in on this device</span></label>
+        <button class="checkout-button" id="loginSubmit" type="submit">Log in to account <b>↗</b></button>
+      </form>
+      <div class="login-alt"><span>Need an account?</span><button class="text-link" id="toggleAccountMode" type="button">Create one</button></div>
+      <button class="ghost-button" id="logoutBtn" type="button" hidden>Log out</button>
     </section>
   </div>
   <div class="toast" id="toast" role="status"></div>
