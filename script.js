@@ -16,6 +16,7 @@ const checkoutSuccess = document.querySelector('#checkoutSuccess');
 const checkoutPrice = document.querySelector('#checkoutPrice');
 // Hosted Fincra checkout link for card payments only.
 const FINCRA_CHECKOUT_URL = 'https://checkout-sandbox.dev.fincra.com/payment-link/7465f526d592a38281259';
+const SUBSCRIPTION_PRICE = '$10 / month';
 const FREE_VIDEO_LIMIT = 3;
 const usageKey = `cutline-uploads-${new Date().toISOString().slice(0, 10)}`;
 let dailyUploads = Number(localStorage.getItem(usageKey) || 0);
@@ -136,8 +137,9 @@ upgradeModal.addEventListener('click', event => { if (event.target === upgradeMo
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && !upgradeModal.hidden) closeCheckout(); });
 document.querySelectorAll('.plan-option').forEach(option => option.addEventListener('click', () => {
   document.querySelectorAll('.plan-option').forEach(item => item.classList.toggle('active', item === option));
-  checkoutPrice.textContent = option.dataset.plan === 'annual' ? '$180 / year' : '$19 / month';
+  checkoutPrice.textContent = SUBSCRIPTION_PRICE;
 }));
+checkoutPrice.textContent = SUBSCRIPTION_PRICE;
 paymentForm.addEventListener('submit', event => {
   event.preventDefault();
   if (FINCRA_CHECKOUT_URL) { window.location.href = FINCRA_CHECKOUT_URL; return; }
