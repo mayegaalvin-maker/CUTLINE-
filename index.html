@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cutline — Find the moment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Cutline home"><span class="brand-mark">▰</span> CUTLINE</a>
+    <div class="project-name"><span class="status-dot"></span><span id="projectTitle">Untitled project</span><span class="slash">/</span><span>Episode 042</span></div>
+    <div class="top-actions"><span class="free-counter" id="freeCounter"><b>3</b> free videos today</span><button class="icon-button" aria-label="Undo" title="Undo">↶</button><button class="icon-button" aria-label="Redo" title="Redo">↷</button><button class="upgrade-button" id="upgradeBtn">Unlock unlimited <span>↗</span></button><button class="avatar" aria-label="Profile">JD</button></div>
+  </header>
+
+  <main class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-heading"><span>PROJECT</span><button class="tiny-button" id="newProjectBtn" title="New project">+</button></div>
+      <label class="upload-card" for="videoUpload">
+        <span class="upload-icon">↑</span>
+        <span class="upload-copy"><strong>Drop a video</strong><small>MP4, MOV up to 4GB</small></span>
+        <input id="videoUpload" type="file" accept="video/*" />
+      </label>
+      <div class="source-item active"><span class="source-thumb">▶</span><span><strong id="sourceName">The hidden cost of speed</strong><small id="sourceMeta">01:32:48 · 4K source</small></span><span class="more">•••</span></div>
+      <div class="sidebar-heading clips-heading"><span>CLIPS <em id="clipCount">3</em></span><button class="filter-button">⌁</button></div>
+      <nav class="clip-list" id="clipList">
+        <button class="clip-item selected" data-start="14" data-end="32"><span class="clip-number">01</span><span class="clip-info"><strong>The pivot</strong><small>00:14 — 00:32</small></span><span class="clip-score">92</span></button>
+        <button class="clip-item" data-start="47" data-end="61"><span class="clip-number">02</span><span class="clip-info"><strong>Unexpected answer</strong><small>00:47 — 01:01</small></span><span class="clip-score">88</span></button>
+        <button class="clip-item" data-start="78" data-end="96"><span class="clip-number">03</span><span class="clip-info"><strong>Make it simple</strong><small>01:18 — 01:36</small></span><span class="clip-score">84</span></button>
+      </nav>
+      <div class="sidebar-footer"><span class="storage-bar"><i></i></span><span>2.4 GB used</span><button class="help-button">?</button></div>
+    </aside>
+
+    <section class="workspace">
+      <div class="workspace-toolbar"><div class="crumb"><span>ALL MOMENTS</span><span class="crumb-chevron">/</span><strong>EDIT CLIP 01</strong></div><div class="toolbar-actions"><button class="secondary-button" id="resetBtn">Reset</button><button class="primary-button" id="exportBtn"><span>Export clip</span><span class="button-arrow">↗</span></button></div></div>
+      <div class="editor-grid">
+        <section class="preview-panel">
+          <div class="preview-topline"><span class="eyebrow">PREVIEW</span><span class="time-readout" id="timeReadout">00:14.00 / 00:32.00</span></div>
+          <div class="video-frame" id="videoFrame">
+            <video id="videoPlayer" playsinline></video>
+            <div class="video-placeholder" id="videoPlaceholder"><div class="placeholder-art"><span></span><span></span><span></span></div><strong>Upload your long-form video</strong><small>Cutline will surface the moments worth sharing.</small><label for="videoUpload" class="inline-upload">Choose a video <span>↗</span></label></div>
+            <div class="frame-overlay"><span class="live-label">SOURCE</span><span>16:9</span></div>
+            <div class="play-center" id="playCenter">▶</div>
+          </div>
+          <div class="player-controls"><button class="play-button" id="playBtn" aria-label="Play video">▶</button><button class="skip-button" data-skip="-5">↶<small>5</small></button><button class="skip-button" data-skip="5">↷<small>5</small></button><div class="volume"><span>◒</span><span class="volume-line"><i></i></span></div><span class="control-spacer"></span><button class="control-button" title="Captions">CC</button><button class="control-button" title="Fullscreen">⛶</button></div>
+        </section>
+        <aside class="insights-panel">
+          <div class="insights-heading"><div><span class="eyebrow">AI SIGNALS</span><h2>Best moments</h2></div><span class="pulse-dot"></span></div>
+          <p class="insights-copy">We found 3 high-energy sections with strong share potential.</p>
+          <div class="signal-list">
+            <button class="signal-card active" data-start="14" data-end="32"><span class="signal-time">00:14 — 00:32</span><span class="signal-title">“The pivot nobody saw coming”</span><span class="signal-tags"><em>High energy</em><em>Clear hook</em><b>92</b></span><span class="signal-spark"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+            <button class="signal-card" data-start="47" data-end="61"><span class="signal-time">00:47 — 01:01</span><span class="signal-title">“The answer is simpler than you think”</span><span class="signal-tags"><em>Insight</em><em>Quotable</em><b>88</b></span><span class="signal-spark lower"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+            <button class="signal-card" data-start="78" data-end="96"><span class="signal-time">01:18 — 01:36</span><span class="signal-title">“Make it useful, then make it fast”</span><span class="signal-tags"><em>Practical</em><em>Strong close</em><b>84</b></span><span class="signal-spark lowest"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></button>
+          </div>
+          <button class="scan-button" id="scanBtn"><span class="scan-icon">✦</span><span id="scanLabel">Scan for more moments</span></button>
+        </aside>
+      </div>
+      <section class="timeline-panel">
+        <div class="timeline-header"><div><span class="eyebrow">TIMELINE</span><span class="timeline-hint">Drag the handles to refine your clip</span></div><div class="timeline-tools"><span class="duration-chip" id="durationChip">00:18.0 clip</span><button class="icon-button small" title="Zoom out">−</button><span class="zoom-level">100%</span><button class="icon-button small" title="Zoom in">+</button></div></div>
+        <div class="timeline-ruler"><span>00:00</span><span>00:15</span><span>00:30</span><span>00:45</span><span>01:00</span><span>01:15</span><span>01:30</span></div>
+        <div class="timeline-track" id="timelineTrack"><div class="waveform" aria-hidden="true"></div><div class="selection" id="selection"><button class="handle left" id="leftHandle" aria-label="Adjust clip start"></button><button class="handle right" id="rightHandle" aria-label="Adjust clip end"></button><div class="selection-label">SELECTED MOMENT <span>↔</span></div></div><div class="playhead" id="playhead"></div><div class="moment-mark mark-one"></div><div class="moment-mark mark-two"></div><div class="moment-mark mark-three"></div></div>
+        <div class="track-footer"><span>00:00:00</span><span id="endTime">01:32:48</span></div>
+      </section>
+    </section>
+  </main>
+  <div class="modal-backdrop" id="upgradeModal" hidden>
+    <section class="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+      <button class="modal-close" id="closeModal" aria-label="Close checkout">×</button>
+      <div class="checkout-intro"><span class="eyebrow">CUTLINE PRO</span><h2 id="checkoutTitle">Your next great clip is waiting.</h2><p>Free gets you 3 videos a day. Unlock unlimited uploads, auto-captions, and every export for less than a coffee.</p></div>
+      <div class="pro-perks"><span>✦ Unlimited videos</span><span>CC Auto captions</span><span>↗ Export anywhere</span></div>
+      <div class="plan-toggle single-plan" role="group" aria-label="Billing period"><button class="plan-option active" data-plan="weekly">Weekly <strong>$3<span>/week</span></strong><em>Cancel anytime</em></button></div>
+      <form class="payment-form" id="paymentForm">
+        <label>Email address<input type="email" id="checkoutEmail" placeholder="you@studio.com" required /></label>
+        <label class="policy-check"><input id="noRefunds" type="checkbox" required /><span>I understand that digital subscription payments are final and non-refundable, except where required by law.</span></label>
+        <button class="checkout-button" type="submit">Pay with card <span id="checkoutPrice">$3 / week</span><b>↗</b></button>
+        <small class="secure-note">⌁ Secure Fincra checkout · Card payments only</small>
+      </form>
+      <div class="checkout-success" id="checkoutSuccess" hidden><span>✓</span><strong>Welcome to Cutline Pro</strong><p>Your workspace is ready for unlimited exports.</p><button class="primary-button" id="successClose">Back to editor</button></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
