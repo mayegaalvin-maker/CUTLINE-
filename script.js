@@ -19,12 +19,15 @@ const loginForm = document.querySelector('#loginForm');
 const loginBtn = document.querySelector('#loginBtn');
 const profileBtn = document.querySelector('#profileBtn');
 const toggleAccountMode = document.querySelector('#toggleAccountMode');
+const logoutBtn = document.querySelector('#logoutBtn');
+const rememberMe = document.querySelector('#rememberMe');
 // Hosted Fincra checkout link for card payments only.
 const FINCRA_CHECKOUT_URL = 'https://checkout-sandbox.dev.fincra.com/payment-link/7465f526d592a38281259';
 const SUBSCRIPTION_PRICE = '$10 / month';
 const FREE_VIDEO_LIMIT = 3;
 const usageKey = `cutline-uploads-${new Date().toISOString().slice(0, 10)}`;
 const accountKey = 'cutline-account';
+let accountMode = 'login';
 let dailyUploads = Number(localStorage.getItem(usageKey) || 0);
 let clipStart = 14;
 let clipEnd = 32;
@@ -147,15 +150,39 @@ function syncAccountState() {
     profileBtn.textContent = account.name ? account.name.slice(0, 2).toUpperCase() : 'AC';
     loginBtn.textContent = 'Account';
     profileBtn.title = account.email || 'Account';
+    logoutBtn.hidden = false;
   } else {
     profileBtn.textContent = 'JD';
     loginBtn.textContent = 'Log in';
     profileBtn.title = 'Profile';
+    logoutBtn.hidden = true;
+  }
+}
+
+function setLoginMode(mode) {
+  accountMode = mode;
+  const formTitle = document.querySelector('#loginTitle');
+  const submitText = document.querySelector('#loginSubmit');
+
+  if (mode === 'create') {
+    formTitle.textContent = 'Create your account.';
+    submitText.textContent = 'Create account';
+    toggleAccountMode.textContent = 'Log in';
+    document.querySelector('#loginBtn').textContent = 'Account';
+  } else {
+    formTitle.textContent = 'Welcome back.';
+    submitText.textContent = 'Log in to account';
+    toggleAccountMode.textContent = 'Create one';
   }
 }
 
 document.querySelector('#upgradeBtn').addEventListener('click', () => { upgradeModal.hidden = false; document.querySelector('#checkoutEmail').focus(); });
-document.querySelector('#loginBtn').addEventListener('click', () => { loginModal.hidden = false; document.querySelector('#loginEmail').focus(); });
+document.querySelector('#loginBtn').addEventListener('click', () => {
+  const account = JSON.parse(localStorage.getItem(accountKey) || 'null');
+  loginModal.hidden = false;
+  setLoginMode(account ? 'login' : accountMode);
+  document.querySelector('#loginEmail').focus();
+});
 document.querySelector('#profileBtn').addEventListener('click', () => {
   const account = JSON.parse(localStorage.getItem(accountKey) || 'null');
   if (account) {
@@ -163,6 +190,7 @@ document.querySelector('#profileBtn').addEventListener('click', () => {
     return;
   }
   loginModal.hidden = false;
+  setLoginMode('login');
   document.querySelector('#loginEmail').focus();
 });
 document.querySelector('#closeModal').addEventListener('click', closeCheckout);
@@ -193,28 +221,46 @@ loginForm.addEventListener('submit', event => {
     return;
   }
 
-  const account = { email, name: email.split('@')[0], password };
-  localStorage.setItem(accountKey, JSON.stringify(account));
+  const existingAccount = JSON.parse(localStorage.getItem(accountKey) || 'null');
+
+  if (accountMode === 'create') {
+    const account = { email, name: email.split('@')[0], password, rememberMe: rememberMe.checked };
+    localStorage.setItem(accountKey, JSON.stringify(account));
+    syncAccountState();
+    closeLogin();
+    showToast('Account created successfully.');
+    return;
+  }
+
+  if (!existingAccount) {
+    showToast('No account found. Create one first.');
+    return;
+  }
+
+  if (existingAccount.email !== email || existingAccount.password !== password) {
+    showToast('Incorrect email or password.');
+    return;
+  }
+
+  localStorage.setItem(accountKey, JSON.stringify({ ...existingAccount, rememberMe: rememberMe.checked }));
   syncAccountState();
   closeLogin();
   showToast('Welcome back. Your account is ready.');
 });
 
 toggleAccountMode.addEventListener('click', () => {
-  const formTitle = document.querySelector('#loginTitle');
-  const submitText = document.querySelector('#loginSubmit');
-  const mode = toggleAccountMode.textContent.trim().toLowerCase();
-  if (mode === 'create one') {
-    formTitle.textContent = 'Create your account.';
-    submitText.textContent = 'Create account';
-    toggleAccountMode.textContent = 'Log in';
-  } else {
-    formTitle.textContent = 'Welcome back.';
-    submitText.textContent = 'Log in to account';
-    toggleAccountMode.textContent = 'Create one';
-  }
+  const nextMode = accountMode === 'create' ? 'login' : 'create';
+  setLoginMode(nextMode);
+});
+
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem(accountKey);
+  syncAccountState();
+  closeLogin();
+  showToast('You have been logged out.');
 });
 
 setClip(clipStart, clipEnd);
 updateFreeCounter();
 syncAccountState();
+setLoginMode('login');
