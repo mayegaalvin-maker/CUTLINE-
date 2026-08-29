@@ -11,14 +11,20 @@ const durationChip = document.querySelector('#durationChip');
 const toast = document.querySelector('#toast');
 const track = document.querySelector('#timelineTrack');
 const upgradeModal = document.querySelector('#upgradeModal');
+const loginModal = document.querySelector('#loginModal');
 const paymentForm = document.querySelector('#paymentForm');
 const checkoutSuccess = document.querySelector('#checkoutSuccess');
 const checkoutPrice = document.querySelector('#checkoutPrice');
+const loginForm = document.querySelector('#loginForm');
+const loginBtn = document.querySelector('#loginBtn');
+const profileBtn = document.querySelector('#profileBtn');
+const toggleAccountMode = document.querySelector('#toggleAccountMode');
 // Hosted Fincra checkout link for card payments only.
 const FINCRA_CHECKOUT_URL = 'https://checkout-sandbox.dev.fincra.com/payment-link/7465f526d592a38281259';
 const SUBSCRIPTION_PRICE = '$10 / month';
 const FREE_VIDEO_LIMIT = 3;
 const usageKey = `cutline-uploads-${new Date().toISOString().slice(0, 10)}`;
+const accountKey = 'cutline-account';
 let dailyUploads = Number(localStorage.getItem(usageKey) || 0);
 let clipStart = 14;
 let clipEnd = 32;
@@ -130,11 +136,41 @@ function closeCheckout() {
   checkoutSuccess.hidden = true;
 }
 
+function closeLogin() {
+  loginModal.hidden = true;
+  loginForm.reset();
+}
+
+function syncAccountState() {
+  const account = JSON.parse(localStorage.getItem(accountKey) || 'null');
+  if (account) {
+    profileBtn.textContent = account.name ? account.name.slice(0, 2).toUpperCase() : 'AC';
+    loginBtn.textContent = 'Account';
+    profileBtn.title = account.email || 'Account';
+  } else {
+    profileBtn.textContent = 'JD';
+    loginBtn.textContent = 'Log in';
+    profileBtn.title = 'Profile';
+  }
+}
+
 document.querySelector('#upgradeBtn').addEventListener('click', () => { upgradeModal.hidden = false; document.querySelector('#checkoutEmail').focus(); });
+document.querySelector('#loginBtn').addEventListener('click', () => { loginModal.hidden = false; document.querySelector('#loginEmail').focus(); });
+document.querySelector('#profileBtn').addEventListener('click', () => {
+  const account = JSON.parse(localStorage.getItem(accountKey) || 'null');
+  if (account) {
+    showToast(`Signed in as ${account.email}`);
+    return;
+  }
+  loginModal.hidden = false;
+  document.querySelector('#loginEmail').focus();
+});
 document.querySelector('#closeModal').addEventListener('click', closeCheckout);
+document.querySelector('#closeLoginModal').addEventListener('click', closeLogin);
 document.querySelector('#successClose').addEventListener('click', closeCheckout);
 upgradeModal.addEventListener('click', event => { if (event.target === upgradeModal) closeCheckout(); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape' && !upgradeModal.hidden) closeCheckout(); });
+loginModal.addEventListener('click', event => { if (event.target === loginModal) closeLogin(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { if (!upgradeModal.hidden) closeCheckout(); if (!loginModal.hidden) closeLogin(); } });
 document.querySelectorAll('.plan-option').forEach(option => option.addEventListener('click', () => {
   document.querySelectorAll('.plan-option').forEach(item => item.classList.toggle('active', item === option));
   checkoutPrice.textContent = SUBSCRIPTION_PRICE;
@@ -148,5 +184,37 @@ paymentForm.addEventListener('submit', event => {
   showToast('Checkout complete');
 });
 
+loginForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const email = document.querySelector('#loginEmail').value.trim();
+  const password = document.querySelector('#loginPassword').value.trim();
+  if (!email || !password) {
+    showToast('Please enter your email and password');
+    return;
+  }
+
+  const account = { email, name: email.split('@')[0], password };
+  localStorage.setItem(accountKey, JSON.stringify(account));
+  syncAccountState();
+  closeLogin();
+  showToast('Welcome back. Your account is ready.');
+});
+
+toggleAccountMode.addEventListener('click', () => {
+  const formTitle = document.querySelector('#loginTitle');
+  const submitText = document.querySelector('#loginSubmit');
+  const mode = toggleAccountMode.textContent.trim().toLowerCase();
+  if (mode === 'create one') {
+    formTitle.textContent = 'Create your account.';
+    submitText.textContent = 'Create account';
+    toggleAccountMode.textContent = 'Log in';
+  } else {
+    formTitle.textContent = 'Welcome back.';
+    submitText.textContent = 'Log in to account';
+    toggleAccountMode.textContent = 'Create one';
+  }
+});
+
 setClip(clipStart, clipEnd);
 updateFreeCounter();
+syncAccountState();
